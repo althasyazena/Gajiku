@@ -4,147 +4,167 @@
 
 @section('content')
 
-    {{-- ===== HEADER ===== --}}
-        <div class="flex items-center gap-3 mb-6">
-            <a href="{{ route('gaji.index') }}"
-                class="p-2 rounded-lg hover:bg-gray-100 transition text-gray-400 hover:text-gray-600">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                </svg>
-            </a>
-            <div>
-                <h1 class="text-xl font-bold text-gray-800">Detail Slip Gaji</h1>
-                <p class="text-sm text-gray-400 mt-0.5">Periode
-                    {{ \Carbon\Carbon::create()->month($salary->bulan)->translatedFormat('F') }}
-                    {{ $salary->tahun }}
-                </p>
-            </div>
-        </div>
+    <div class="flex min-h-screen">
+        <div class="flex-1 flex flex-col">
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- CONTENT -->
+            <main class="flex-1 p-6">
 
-            {{-- ===== KOLOM KIRI ===== --}}
-            <div class="lg:col-span-2 space-y-5">
+                <div class="rounded-2xl bg-white h-full">
+                    <!-- HEADER -->
+                    <div class="mb-6 flex items-center gap-4 mx-6 pt-6">
+                        <button class="text-2xl mb-6 bg-secondary text-tertiary">
+                            <i class="ri-arrow-left-circle-line"></i>
+                        </button>
+                        <div>
+                            <div class="flex items-center gap-2.5 mb-1">
+                                <div class="w-2 h-10 bg-accent rounded-full"></div>
+                                <h1 class="text-4xl font-bold text-tertiary">Input <span class="text-secondary bg-accent py-1 px-2 rounded-lg">Gaji</span> Karyawan</h1>
+                            </div>
+                            <p class="text-gray-500 ml-3.5 mt-2">Isi form di bawah untuk membuat slip gaji</p>
+                        </div>
+                    </div>
 
-                {{-- Info Karyawan --}}
-                <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-                    <h2 class="text-sm font-semibold text-gray-700 mb-4 pb-3 border-b border-gray-100">
-                        Informasi Karyawan
-                    </h2>
-                    <div class="space-y-3 text-sm">
-                        <div class="flex justify-between">
-                            <span class="text-gray-400">Nama</span>
-                            <span class="font-medium text-gray-700">{{ $salary->employee->name }}</span>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mx-6">
+
+                        <!-- LEFT -->
+                        <div class="lg:col-span-2 space-y-5">
+
+                        <!-- INFO -->
+                        <div class="bg-white rounded-xl shadow-sm p-6">
+                            <h2 class="text-md font-semibold mb-4 border-b pb-2 text-tertiary">
+                                Informasi Karyawan
+                            </h2>
+
+                            <div class="space-y-2 text-sm">
+
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Nama</span>
+                                    <span class="font-medium">
+                                        {{ $salary->employee->name }}
+                                    </span>
+                                </div>
+
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">NIK</span>
+                                    <span class="font-medium">
+                                        {{ $salary->employee->nik }}
+                                    </span>
+                                </div>
+
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Jabatan</span>
+                                    <span class="font-medium">
+                                        {{ $salary->employee->position ?? '-' }}
+                                    </span>
+                                </div>
+
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Periode</span>
+                                    <span class="font-medium">
+                                        {{ \Carbon\Carbon::create()->month($salary->bulan)->translatedFormat('F') }}
+                                        {{ $salary->tahun }}
+                                    </span>
+                                </div>
+
+                            </div>
                         </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-400">NIK</span>
-                            <span class="font-medium text-gray-700">{{ $salary->employee->nik }}</span>
+
+                        <!-- GAJI -->
+                        <div class="bg-white rounded-xl shadow-sm p-6">
+                            <h2 class="text-md font-semibold mb-4 border-b pb-2 text-tertiary">
+                                Komponen Gaji
+                            </h2>
+
+                            <div class="space-y-2 text-sm">
+
+                                <p class="text-xs text-gray-400 uppercase">
+                                    Pendapatan
+                                </p>
+
+                                <div class="flex justify-between">
+                                    <span>Gaji Pokok</span>
+                                    <span>
+                                        Rp {{ number_format($salary->gaji_pokok, 0, ',', '.') }}
+                                    </span>
+                                </div>
+
+                                <div class="flex justify-between text-green-600">
+                                    <span>Tunjangan Makan</span>
+                                    <span>
+                                        + Rp {{ number_format($salary->tunjangan_makan, 0, ',', '.') }}
+                                    </span>
+                                </div>
+
+                                <div class="flex justify-between text-green-600">
+                                    <span>Tunjangan Transportasi</span>
+                                    <span>
+                                        + Rp {{ number_format($salary->tunjangan_transportasi, 0, ',', '.') }}
+                                    </span>
+                                </div>
+
+                                <p class="text-xs text-gray-400 uppercase pt-2">
+                                    Potongan
+                                </p>
+
+                                <div class="flex justify-between text-red-500">
+                                    <span>Potongan</span>
+                                    <span>
+                                        - Rp {{ number_format($salary->potongan, 0, ',', '.') }}
+                                    </span>
+                                </div>
+
+                                <div class="border-t pt-2 flex justify-between font-bold text-blue-600">
+                                    <span>Gaji Bersih</span>
+                                    <span>
+                                        Rp {{ number_format($salary->gaji_bersih, 0, ',', '.') }}
+                                    </span>
+                                </div>
+
+                            </div>
                         </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-400">Jabatan</span>
-                            <span class="font-medium text-gray-700">{{ $salary->employee->position ?? '-' }}</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-400">Periode</span>
-                            <span class="font-medium text-gray-700">
+
+                    </div>
+
+                        <!-- RIGHT -->
+                        <div class="space-y-5">
+
+                        <!-- SUMMARY -->
+                        <div class="bg-white rounded-xl shadow-sm p-6 text-center">
+                            <p class="text-sm text-gray-400">Total Diterima</p>
+
+                            <p class="text-2xl font-bold text-tertiary">
+                                Rp {{ number_format($salary->gaji_bersih, 0, ',', '.') }}
+                            </p>
+
+                            <p class="text-sm text-gray-400">
                                 {{ \Carbon\Carbon::create()->month($salary->bulan)->translatedFormat('F') }}
                                 {{ $salary->tahun }}
-                            </span>
+                            </p>
+
+                            <div class="mt-4">
+                                <span class="px-3 py-1 bg-green-50 text-green-600 text-sm rounded-full">
+                                    ✓ Slip Gaji Tersimpan
+                                </span>
+                            </div>
                         </div>
+
+                        <!-- ACTION -->
+                        <div class="bg-white rounded-xl shadow-sm p-6">
+                            <a href="{{ route('gaji.download', $salary->id) }}"
+                                class="block w-full py-3 bg-tertiary text-secondary rounded-lg hover:bg-accent transition duration-300 text-center">
+                                Download Slip Gaji
+                            </a>
+                        </div>
+
                     </div>
-                </div>
-
-                {{-- Komponen Gaji --}}
-                <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-                    <h2 class="text-sm font-semibold text-gray-700 mb-4 pb-3 border-b border-gray-100">
-                        Komponen Gaji
-                    </h2>
-                    <div class="space-y-3 text-sm">
-
-                        {{-- Pendapatan --}}
-                        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide">Pendapatan</p>
-
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-500">Gaji Pokok</span>
-                            <span class="font-medium text-gray-700">
-                                Rp {{ number_format($salary->gaji_pokok, 2, ',', '.') }}
-                            </span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-500">Tunjangan Makan</span>
-                            <span class="font-medium text-green-600">
-                                + Rp {{ number_format($salary->tunjangan_makan, 2, ',', '.') }}
-                            </span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-500">Tunjangan Transportasi</span>
-                            <span class="font-medium text-green-600">
-                                + Rp {{ number_format($salary->tunjangan_transportasi, 2, ',', '.') }}
-                            </span>
-                        </div>
-
-                        {{-- Potongan --}}
-                        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide pt-2">Potongan</p>
-
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-500">Potongan</span>
-                            <span class="font-medium text-red-500">
-                                - Rp {{ number_format($salary->potongan, 0, ',', '.') }}
-                            </span>
-                        </div>
-
-                        {{-- Total --}}
-                        <div class="border-t border-dashed border-gray-200 pt-3 mt-3 flex justify-between items-center">
-                            <span class="font-semibold text-gray-700">Gaji Bersih</span>
-                            <span class="font-bold text-blue-600 text-base">
-                                Rp {{ number_format($salary->gaji_bersih, 0, ',', '.') }}
-                            </span>
-                        </div>
 
                     </div>
                 </div>
 
-            </div>
-            {{-- ===== END KOLOM KIRI ===== --}}
-
-            {{-- ===== KOLOM KANAN ===== --}}
-            <div class="space-y-5">
-
-                {{-- Ringkasan --}}
-                <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 mt-4">
-                    <h2 class="text-sm font-semibold text-gray-700 mb-4 pb-3 border-b border-gray-100">
-                        Ringkasan
-                    </h2>
-                    <div class="text-center py-4">
-                        <p class="text-xs text-gray-400 mb-1">Total Diterima</p>
-                        <p class="text-2xl font-bold text-blue-600">
-                            Rp {{ number_format($salary->gaji_bersih, 0, ',', '.') }}
-                        </p>
-                        <p class="text-xs text-gray-400 mt-1">
-                            {{ \Carbon\Carbon::create()->month($salary->bulan)->translatedFormat('F') }}
-                            {{ $salary->tahun }}
-                        </p>
-                    </div>
-
-                    {{-- Badge --}}
-                    <div class="mt-4 flex justify-center">
-                        <span
-                            class="px-3 py-1 bg-green-50 text-green-600 text-xs font-semibold rounded-full border border-green-100">
-                            ✓ Slip Gaji Tersimpan
-                        </span>
-                    </div>
-                </div>
-
-                {{-- Aksi --}}
-                <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-3 mt-4">
-                    <a href="{{ route('gaji.download', $salary->id) }}" class="block w-full py-3 text-center text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition">
-                        Download Slip Gaji
-                    </a>
-                </div>
-
-            </div>
-            {{-- ===== END KOLOM KANAN ===== --}}
+            </main>
 
         </div>
+    </div>
 
 @endsection
